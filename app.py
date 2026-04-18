@@ -192,18 +192,24 @@ div[data-testid="stMetric"] { background: #0d1b2a; border-radius: 10px; padding:
 # ─────────────────────────────────────────────────────────────────────────────
 @st.cache_resource(show_spinner="Loading models...")
 def load_all():
+    import subprocess
     biased_path   = "model/biased_model.pkl"
     debiased_path = "model/debiased_model.pkl"
     test_path     = "model/test_data.csv"
     data_path     = "data/loan_data.csv"
 
+    # Ensure init files exist and are clean
+    os.makedirs("data",  exist_ok=True)
+    os.makedirs("model", exist_ok=True)
+    for init in ["data/__init__.py", "model/__init__.py"]:
+        if not os.path.exists(init):
+            open(init, "w").write("")
+
     if not os.path.exists(data_path):
-        os.makedirs("data", exist_ok=True)
-        import data.generate_dataset
+        subprocess.run([sys.executable, "data/generate_dataset.py"], check=True)
 
     if not (os.path.exists(biased_path) and os.path.exists(debiased_path)):
-        from model.train import train_models
-        train_models()
+        subprocess.run([sys.executable, "model/train.py"], check=True)
 
     with open(biased_path,   "rb") as f: bm = pickle.load(f)
     with open(debiased_path, "rb") as f: dm = pickle.load(f)
