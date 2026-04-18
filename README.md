@@ -29,8 +29,8 @@ Open: http://localhost:8501
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/Gowtham280103/aisolution.git
-cd aisolution
+git clone https://github.com/Gowtham280103/aiapp.git
+cd aiapp
 
 # 2. Set your project
 gcloud config set project gen-lang-client-0903375444
